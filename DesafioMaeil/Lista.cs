@@ -1,8 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+
 
 namespace DesafioMaeil
 {
@@ -22,7 +21,7 @@ namespace DesafioMaeil
         List<Row> lista; 
         Log log;
 
-        public Lista(string referencia, string cliente, string estado, string tipo, string matricula, string tipoCarga, string prioridade, string dataRegisto, string blockedTime, string pod, string parque, string tipoEquipamento, int depositIdBlocking, string dataAtribExp, string vessel, string voyage, string pol) : base(referencia, cliente, estado, tipo, matricula, tipoCarga, prioridade, dataRegisto, blockedTime, pod, parque, tipoEquipamento, depositIdBlocking, dataAtribExp, vessel, voyage, pol)
+        public Lista(string referencia, string cliente, string estado, string tipo, string matricula, string tipoCarga, string prioridade, string dataRegisto, string blockedTime, string pod, string parque, string tipoEquipamento, string depotIdBlocking, string dataAtribExp, string vessel, string voyage, string pol) : base(referencia, cliente, estado, tipo, matricula, tipoCarga, prioridade, dataRegisto, blockedTime, pod, parque, tipoEquipamento, depotIdBlocking, dataAtribExp, vessel, voyage, pol)
         {
             this.referencia = referencia;
             this.cliente = cliente;
@@ -36,7 +35,7 @@ namespace DesafioMaeil
             this.pod = pod;
             this.parque = parque;
             this.tipoEquipamento = tipoEquipamento;
-            this.depositIdBlocking = depositIdBlocking;
+            this.depotIdBlocking = depotIdBlocking;
             this.dataAtribExp = dataAtribExp;
             this.vessel = vessel;
             this.voyage = voyage;

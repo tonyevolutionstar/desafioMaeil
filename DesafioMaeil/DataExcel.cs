@@ -35,15 +35,15 @@ namespace DesafioMaeil
                 //Row rowVal = new Row(dt.Rows[0][i++].ToString(), dt.Rows[1][i++].ToString(), dt.Rows[2][i++].ToString(), dt.Rows[3][i++].ToString(), dt.Rows[4][i++].ToString(), dt.Rows[5][i++].ToString(), dt.Rows[6][i++].ToString(), dt.Rows[7][i++].ToString(), dt.Rows[8][i++].ToString(), dt.Rows[9][i++].ToString(), dt.Rows[10][i++].ToString(), dt.Rows[11][i++].ToString(), Convert.ToInt32(dt.Rows[12][i++].ToString()), dt.Rows[13][i++].ToString(), dt.Rows[14][i++].ToString(), dt.Rows[15][i++].ToString(), dt.Rows[16][i++].ToString()); 
                 //rowValues.Add(rowVal);
                 //row.Cells[""]; insert column name
-                Row rowVal = new Row();
+                //Row rowVal = new Row();
 
-                gridValues.Add(rowVal);
+                //gridValues.Add(rowVal);
             }
-
+            return gridValues;
         }
 
 
-        public void ImportExcel()
+        public DataTable ImportExcel()
         {
             //https://www.youtube.com/watch?v=k44-N4Pegag
             log.Output("A importar o ficheiro excel");
@@ -60,7 +60,7 @@ namespace DesafioMaeil
                     if(isFirtRow)
                     {
                         foreach (IXLCell cell in row.Cells())
-                            dt.Columns.Add(cell.Value.ToString());
+                            dt.Columns.Add(Convert.ToString(cell.Value.ToString()));
                         isFirtRow = false;
                     }else
                     {
@@ -68,7 +68,8 @@ namespace DesafioMaeil
                         int i = 0;
                         foreach(IXLCell cell in row.Cells(1, dt.Columns.Count)) //add empty cells //https://www.aspsnippets.com/questions/347195/Solved-Empty-cells-skipped-ignored-while-reading-data-from-Excel-to-DataTable-in-ClosedXML/
                         {
-                            dt.Rows[dt.Rows.Count - 1][i++] = cell.Value.ToString();
+                            dt.Rows[dt.Rows.Count - 1][i++] = Convert.ToString(cell.Value.ToString()); // convert to string garantues that the int values is converted to int
+                     
                         }
                     }
 
@@ -79,6 +80,7 @@ namespace DesafioMaeil
             }
 
             log.Output("Importação concluída");
+            return dt;
         }
 
 
