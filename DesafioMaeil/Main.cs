@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Data;
 using System.Windows.Forms;
 
@@ -9,8 +10,8 @@ namespace DesafioMaeil
         private string assemblyPath = System.Reflection.Assembly.GetExecutingAssembly().Location;
         private string csvFile;
         public Log log;
-        private Row row;
 
+        private Lista listaClass; 
 
         private readonly string errorFileSelect = "Error, no selected file";
 
@@ -33,7 +34,7 @@ namespace DesafioMaeil
         public bool Choose_file()
         {
             string currentDirectory = System.IO.Path.GetDirectoryName(assemblyPath);
-             OpenFileDialog ofd = new OpenFileDialog() { Filter = "Excel Workbook|*.xlsx|Excel|*csv" , Multiselect = false};
+            OpenFileDialog ofd = new OpenFileDialog() { Filter = "Excel Workbook|*.xlsx|Excel|*csv" , Multiselect = false};
             ofd.InitialDirectory = currentDirectory;
             DialogResult result = ofd.ShowDialog();
              if(result == DialogResult.OK)
@@ -51,9 +52,11 @@ namespace DesafioMaeil
             if(Choose_file())
             {
                 string nameFile = GetName();
-                 log.Output($"Foi escolhido o ficheiro {nameFile} para leitura");
+                log.Output($"Foi escolhido o ficheiro {nameFile} para leitura");
                 DataExcel dataExcel = new DataExcel(dataGridView, csvFile);
                 dataExcel.ImportExcel();
+                listaClass = new Lista();
+                listaClass.listaRow = dataExcel.ConvertDataToList();
             }else
             {
                 MessageBox.Show(errorFileSelect);
@@ -64,16 +67,27 @@ namespace DesafioMaeil
 
         private void SearchBtn_Click(object sender, EventArgs e)
         {
-            try
-            {
-                DataView dv = dataGridView.DataSource as DataView;
-                if (dv != null)
-                    dv.RowFilter = refSearch.Text;
+            //083LI0337850
+            log.Output($"Searching for a reference: {referenciaVal.Text}");
 
-            }catch (Exception ex)
+            if(String.IsNullOrEmpty(referenciaVal.Text))
             {
-                log.Output(ex.Message);
-                MessageBox.Show(ex.Message);
+                log.Output("Reference it is required to search");
+                MessageBox.Show("Reference it is required to search");
+            }
+            else
+            {
+                List<Row> lSearch = listaClass.Search(referenciaVal.Text);
+                if(lSearch.Count == 0)
+                {
+                    log.Output("Reference not found");
+                    MessageBox.Show("Reference not found");
+                }
+                else
+                {
+                    dataGridView.DataSource = lSearch;
+                    log.Output($"Found {lSearch.Count} references for {referenciaVal.Text}");
+                }
             }
         }
 
@@ -83,33 +97,52 @@ namespace DesafioMaeil
             dataExcel.ExportExcel();
         }
 
-        private void GetValuesOfTextInputs()
+        private void InsertBtn_Click(object sender, EventArgs e)
         {
 
         }
 
-        private void insertBtn_Click(object sender, EventArgs e)
+        private void UpdateBtn_Click(object sender, EventArgs e)
         {
 
         }
 
-        private void updateBtn_Click(object sender, EventArgs e)
+        private void DeleteBtn_Click(object sender, EventArgs e)
         {
 
         }
 
-        private void deleteBtn_Click(object sender, EventArgs e)
+        private void ResetBtn_Click(object sender, EventArgs e)
         {
-
+            ClearTextBox();
+            dataGridView.DataSource = listaClass.listaRow;
         }
 
-        private void Main_Load(object sender, EventArgs e)
+        private void ClearTextBox()
         {
-           
+            referenciaVal.Text = "";
+            clienteVal.Text = "";
+            estadoVal.Text = "";
+            tipoVal.Text = "";
+            matriculaVal.Text = "";
+            tipoCargaVal.Text = "";
+            prioridadeVal.Text = "";
+            dataRegistoVal.Text = "";
+            blockedTimeVal.Text = "";
+            podVal.Text = "";
+            parqueVal.Text = "";
+            tipoEquipVal.Text = "";
+            depositVal.Text = "";
+            dataAtribExpVal.Text = "";
+            vesselVal.Text = "";
+            voyageVal.Text = "";
+            polVal.Text = "";
         }
 
-        public void VerifyNull()
+
+        private void VerifyNull()
         {
+            log.Output("Verifying null values on datagridview");
             if (dataGridView.SelectedRows[0].Cells[0].Value == null)
                 dataGridView.SelectedRows[0].Cells[0].Value = "";
             if (dataGridView.SelectedRows[0].Cells[1].Value == null)
@@ -144,10 +177,10 @@ namespace DesafioMaeil
                 dataGridView.SelectedRows[0].Cells[15].Value = "";
             if (dataGridView.SelectedRows[0].Cells[16].Value == null)
                 dataGridView.SelectedRows[0].Cells[16].Value = "";
-            
+            log.Output("Null values verified");
         }
 
-        private void dataGridView_CellContentClick(object sender, DataGridViewCellEventArgs e)
+        private void DataGridView_CellContentClick(object sender, DataGridViewCellEventArgs e)
         {
             //https://www.youtube.com/watch?v=C3E1fsXpGRs
 
@@ -172,5 +205,6 @@ namespace DesafioMaeil
             polVal.Text = dataGridView.SelectedRows[0].Cells[16].Value.ToString();
 
         }
+
     }
 }
