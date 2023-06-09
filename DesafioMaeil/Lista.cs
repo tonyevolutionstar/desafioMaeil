@@ -7,15 +7,14 @@ namespace DesafioMaeil
 {
     interface ILista
     {
-        bool Insert(Row row);
+        void Insert(Row row);
 
-        bool Update(Row row);
+        void Update(Row oldRow, Row newRow);
 
-        bool Delete(Row row);
+        void Delete(Row row);
 
         List<Row> Search(string referencia);
 
-        void Show();
     }
 
     public class Lista : ILista
@@ -25,29 +24,51 @@ namespace DesafioMaeil
 
         public Lista()
         {
-           log = new Log();
+            listaRow = new List<Row>();
+            log = new Log();
         }
 
 
-
-        public bool Insert(Row row)
+        public void Insert(Row row)
         {
             listaRow.Add(row);
-            log.Output($"referencia {row.referencia} adicionada");
-            return true;
         }
 
-        public bool Delete(Row row)
+        /// <summary>
+        /// update based on old reference
+        /// </summary>
+        /// <param name="oldRow"></param>
+        /// <param name="newRow"></param>
+        public void Update(Row oldRow, Row newRow)
         {
-           /* bool search = Search(row.Referencia);
-            if (search)
+            listaRow.Where(x => x.Referencia.Equals(oldRow.Referencia)).Update(x => x.Referencia = newRow.Referencia);
+            listaRow.Where(x => x.Referencia.Equals(oldRow.Referencia)).Update(x => x.Cliente = newRow.Cliente);
+            listaRow.Where(x => x.Referencia.Equals(oldRow.Referencia)).Update(x => x.Estado = newRow.Estado);
+            listaRow.Where(x => x.Referencia.Equals(oldRow.Referencia)).Update(x => x.Tipo = newRow.Tipo);
+            listaRow.Where(x => x.Referencia.Equals(oldRow.Referencia)).Update(x => x.Matricula = newRow.Matricula);
+            listaRow.Where(x => x.Referencia.Equals(oldRow.Referencia)).Update(x => x.TipoCarga = newRow.TipoCarga);
+            listaRow.Where(x => x.Referencia.Equals(oldRow.Referencia)).Update(x => x.Prioridade = newRow.Prioridade);
+            listaRow.Where(x => x.Referencia.Equals(oldRow.Referencia)).Update(x => x.DataRegisto = newRow.DataRegisto);
+            listaRow.Where(x => x.Referencia.Equals(oldRow.Referencia)).Update(x => x.BlockedTime = newRow.BlockedTime);
+            listaRow.Where(x => x.Referencia.Equals(oldRow.Referencia)).Update(x => x.Pod = newRow.Pod);
+            listaRow.Where(x => x.Referencia.Equals(oldRow.Referencia)).Update(x => x.Parque = newRow.Parque);
+            listaRow.Where(x => x.Referencia.Equals(oldRow.Referencia)).Update(x => x.TipoEquipamento = newRow.TipoEquipamento);
+            listaRow.Where(x => x.Referencia.Equals(oldRow.Referencia)).Update(x => x.DepotIdBlocking = newRow.DepotIdBlocking);
+            listaRow.Where(x => x.Referencia.Equals(oldRow.Referencia)).Update(x => x.DataAtribExp = newRow.DataAtribExp);
+            listaRow.Where(x => x.Referencia.Equals(oldRow.Referencia)).Update(x => x.Vessel = newRow.Vessel);
+            listaRow.Where(x => x.Referencia.Equals(oldRow.Referencia)).Update(x => x.Voyage = newRow.Voyage);
+            listaRow.Where(x => x.Referencia.Equals(oldRow.Referencia)).Update(x => x.Pol = newRow.Pol);
+        }
+
+        public void Delete(Row row)
+        {
+            List<Row> delRes = listaRow.Where(x => x.Referencia.Equals(row.Referencia)).ToList();
+            
+            for(int i = 0; i < delRes.Count; i++)
             {
-                listaRow.Remove(row);
-                log.Output("referencia {row.referencia} eliminada");
-                return true;
+                log.Output($"delRes[i]: {delRes[i]}");
+                listaRow.Remove(delRes[i]);
             }
-           */
-            return false; 
         }
 
         private void VerifyNull(Row listaRow)
@@ -114,24 +135,7 @@ namespace DesafioMaeil
                     $" dataAtribExp: {listaRow.DataAtribExp} | vessel: {listaRow.Vessel} | voyage: {listaRow.Voyage} | pol: {listaRow.Pol}");
         }
 
-
-        public bool Update(Row row)
-        {
-            //lista.Where(x => x.Referencia.Equals(row.Referencia)).Update(x => x.Referencia = row.Referencia);
-            log.Output("referencia {row.referencia} alterada");
-            return true;
-        }
-
-        /// <summary>
-        /// Show all the values in the list
-        /// </summary>
-        public void Show()
-        {
-            for(int i = 0; i < listaRow.Count; i++)
-            {
-                PrintList(listaRow[i]);
-            }
-        }
+     
     }
 
     public static class LinqUpdates
@@ -142,5 +146,6 @@ namespace DesafioMaeil
             foreach (var item in source)
                 action(item);
         }
+
     }
 }

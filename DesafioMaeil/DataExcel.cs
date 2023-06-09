@@ -77,6 +77,7 @@ namespace DesafioMaeil
                 Row rowVal = new Row(row.Cells[0].Value.ToString(), row.Cells[1].Value.ToString(), row.Cells[2].Value.ToString(), row.Cells[3].Value.ToString(), row.Cells[4].Value.ToString(), row.Cells[5].Value.ToString(), row.Cells[6].Value.ToString(), row.Cells[7].Value.ToString(), row.Cells[8].Value.ToString(), row.Cells[9].Value.ToString(), row.Cells[10].Value.ToString(), row.Cells[11].Value.ToString(), row.Cells[12].Value.ToString(), row.Cells[13].Value.ToString(), row.Cells[14].Value.ToString(), row.Cells[15].Value.ToString(), row.Cells[16].Value.ToString());
                 gridValues.Add(rowVal);
             }
+
             return gridValues;
         }
 
@@ -86,7 +87,6 @@ namespace DesafioMaeil
             //https://www.youtube.com/watch?v=k44-N4Pegag
             log.Output("Importing excel file");
 
-            Cursor.Current = Cursors.WaitCursor;    
             DataTable dt = new DataTable();
             
             using(XLWorkbook wb = new XLWorkbook(csvFile))
@@ -120,8 +120,9 @@ namespace DesafioMaeil
 
 
 
-        public void ExportExcel()
+        public void ExportExcel(List<Row> rowL)
         {
+            log.Output("Exporting File");
             SaveFileDialog sfd = new SaveFileDialog() { Filter = "Excel Workbook|*.xlsx|Excel|*csv" };
             if(sfd.ShowDialog() == DialogResult.OK)
             {
@@ -129,10 +130,12 @@ namespace DesafioMaeil
                 {
                     using(XLWorkbook wb = new XLWorkbook())
                     {
-                        wb.Worksheets.Add(dataGridView.ClipboardCopyMode.ToString());
+                        wb.AddWorksheet("Bookings").FirstCell().InsertTable<Row>(rowL,false);
                         wb.SaveAs(sfd.FileName);
                         log.Output($"file {sfd.FileName} saved");
+                        MessageBox.Show($"file {sfd.FileName} saved");
                     }
+                    log.Output("File exported");
                 }
                 catch(Exception ex)
                 {
