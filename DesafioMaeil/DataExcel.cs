@@ -82,9 +82,8 @@ namespace DesafioMaeil
         }
 
 
-        public DataTable ImportExcel()
+        public DataTable ImportExcel() //https://www.youtube.com/watch?v=k44-N4Pegag
         {
-            //https://www.youtube.com/watch?v=k44-N4Pegag
             log.Output("Importing excel file");
 
             DataTable dt = new DataTable();
@@ -104,7 +103,7 @@ namespace DesafioMaeil
                     {
                         dt.Rows.Add();
                         int i = 0;
-                        foreach(IXLCell cell in row.Cells(1, dt.Columns.Count)) //add empty cells //https://www.aspsnippets.com/questions/347195/Solved-Empty-cells-skipped-ignored-while-reading-data-from-Excel-to-DataTable-in-ClosedXML/
+                        foreach (IXLCell cell in row.Cells(1, dt.Columns.Count)) //add empty cells //https://www.aspsnippets.com/questions/347195/Solved-Empty-cells-skipped-ignored-while-reading-data-from-Excel-to-DataTable-in-ClosedXML/
                         {
                             dt.Rows[dt.Rows.Count - 1][i++] = Convert.ToString(cell.Value.ToString()); // convert to string garantues that the int values is converted to string
                         }
@@ -117,7 +116,6 @@ namespace DesafioMaeil
             log.Output("Importation concluded");
             return dt;
         }
-
 
 
         public void ExportExcel(List<Row> rowL)

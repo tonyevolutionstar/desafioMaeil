@@ -35,7 +35,6 @@
             this.dataGridView = new System.Windows.Forms.DataGridView();
             this.referenciaLbl = new System.Windows.Forms.Label();
             this.referenciaVal = new System.Windows.Forms.TextBox();
-            this.rowBindingSource = new System.Windows.Forms.BindingSource(this.components);
             this.estadoVal = new System.Windows.Forms.TextBox();
             this.estadoLbl = new System.Windows.Forms.Label();
             this.tipoVal = new System.Windows.Forms.TextBox();
@@ -72,8 +71,11 @@
             this.clienteVal = new System.Windows.Forms.TextBox();
             this.resetBtn = new System.Windows.Forms.Button();
             this.deleteBtn = new System.Windows.Forms.Button();
+            this.rowBindingSource = new System.Windows.Forms.BindingSource(this.components);
+            this.listaBindingSource = new System.Windows.Forms.BindingSource(this.components);
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.rowBindingSource)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.listaBindingSource)).BeginInit();
             this.SuspendLayout();
             // 
             // LoadFileBtn
@@ -114,6 +116,7 @@
             // 
             // dataGridView
             // 
+            this.dataGridView.AccessibleRole = System.Windows.Forms.AccessibleRole.None;
             this.dataGridView.AllowUserToOrderColumns = true;
             this.dataGridView.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.dataGridView.Location = new System.Drawing.Point(12, 336);
@@ -147,10 +150,6 @@
             this.referenciaVal.Name = "referenciaVal";
             this.referenciaVal.Size = new System.Drawing.Size(135, 27);
             this.referenciaVal.TabIndex = 7;
-            // 
-            // rowBindingSource
-            // 
-            this.rowBindingSource.DataSource = typeof(DesafioMaeil.Row);
             // 
             // estadoVal
             // 
@@ -523,6 +522,14 @@
             this.deleteBtn.UseVisualStyleBackColor = false;
             this.deleteBtn.Click += new System.EventHandler(this.DeleteBtn_Click);
             // 
+            // rowBindingSource
+            // 
+            this.rowBindingSource.DataSource = typeof(DesafioMaeil.Row);
+            // 
+            // listaBindingSource
+            // 
+            this.listaBindingSource.DataSource = typeof(DesafioMaeil.Lista);
+            // 
             // Main
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
@@ -575,6 +582,7 @@
             this.Text = "DesafioMaeil";
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.rowBindingSource)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.listaBindingSource)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -625,6 +633,7 @@
         private System.Windows.Forms.TextBox clienteVal;
         private System.Windows.Forms.Button resetBtn;
         private System.Windows.Forms.Button deleteBtn;
+        private System.Windows.Forms.BindingSource listaBindingSource;
     }
 }
 

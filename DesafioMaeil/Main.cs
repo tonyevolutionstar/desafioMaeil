@@ -12,12 +12,11 @@ namespace DesafioMaeil
         public Log log;
 
         private Lista listaClass;
-        private DataTable dt;
+        int index; //cell index
+        DataTable dt;
+        bool search = false;
 
         private readonly string errorFileSelect = "Error, no selected file";
-        bool insertFlag = false;
-        bool updateFlag = false;
-        bool deleteFlag = false;
 
         public Main()
         {
@@ -60,7 +59,6 @@ namespace DesafioMaeil
                 log.Output($"File {nameFile} choosed for reading");
                 DataExcel dataExcel = new DataExcel(dataGridView, csvFile);
                 dt = dataExcel.ImportExcel();
-               
                 listaClass.listaRow = dataExcel.ConvertDataToList();
             }
             else
@@ -73,6 +71,7 @@ namespace DesafioMaeil
 
         private void SearchBtn_Click(object sender, EventArgs e)
         {
+          
             log.Output($"Searching for a reference: {referenciaVal.Text}");
 
             if(String.IsNullOrEmpty(referenciaVal.Text))
@@ -82,6 +81,7 @@ namespace DesafioMaeil
             }
             else
             {
+
                 List<Row> lSearch = listaClass.Search(referenciaVal.Text);
                 if(lSearch.Count == 0)
                 {
@@ -94,6 +94,7 @@ namespace DesafioMaeil
                     log.Output($"Found {lSearch.Count} references for {referenciaVal.Text}");
                 }
             }
+           
         }
 
         private void SaveFile_Btn_Click(object sender, EventArgs e)
@@ -110,7 +111,8 @@ namespace DesafioMaeil
             $" | tipoCarga: {rowVal.TipoCarga} | prioridade: {rowVal.Prioridade} | dataRegisto: {rowVal.DataRegisto} | blockedTime: {rowVal.BlockedTime} " +
             $"| pod: {rowVal.Pod} | parque: {rowVal.Parque} | tipoEquipamento: {rowVal.TipoEquipamento} | DepotIdBlocking: {rowVal.DepotIdBlocking} | " +
             $" dataAtribExp: {rowVal.DataAtribExp} | vessel: {rowVal.Vessel} | voyage: {rowVal.Voyage} | pol: {rowVal.Pol}");
-            //dataGridView.DataSource = listaClass.listaRow;
+            dt.Rows.Add(referenciaVal.Text, clienteVal.Text, estadoVal.Text, tipoVal.Text, matriculaVal.Text, tipoCargaVal.Text, prioridadeVal.Text, dataRegistoVal.Text, blockedTimeVal.Text, podVal.Text, parqueVal.Text, tipoEquipVal.Text, depositVal.Text, dataAtribExpVal.Text, vesselVal.Text, voyageVal.Text, polVal.Text);
+
             MessageBox.Show("Inserted Value");
         }
 
@@ -127,7 +129,25 @@ namespace DesafioMaeil
                 $" | tipoCarga: {newRow.TipoCarga} | prioridade: {newRow.Prioridade} | dataRegisto: {newRow.DataRegisto} | blockedTime: {newRow.BlockedTime} " +
                 $"| pod: {newRow.Pod} | parque: {newRow.Parque} | tipoEquipamento: {newRow.TipoEquipamento} | DepotIdBlocking: {newRow.DepotIdBlocking} | " +
                 $" dataAtribExp: {newRow.DataAtribExp} | vessel: {newRow.Vessel} | voyage: {newRow.Voyage} | pol: {newRow.Pol}");
-            //dataGridView.DataSource = listaClass.listaRow;
+            DataGridViewRow newData = dataGridView.Rows[index];
+            newData.Cells[0].Value = referenciaVal.Text;
+            newData.Cells[1].Value = clienteVal.Text;
+            newData.Cells[2].Value = estadoVal.Text;
+            newData.Cells[3].Value = tipoVal.Text;
+            newData.Cells[4].Value = matriculaVal.Text;
+            newData.Cells[5].Value = dataRegistoVal.Text;
+            newData.Cells[6].Value = tipoCargaVal.Text;
+            newData.Cells[7].Value = prioridadeVal.Text;  
+            newData.Cells[8].Value = dataRegistoVal.Text; 
+            newData.Cells[9].Value = blockedTimeVal.Text; 
+            newData.Cells[10].Value = podVal.Text;
+            newData.Cells[11].Value = parqueVal.Text;
+            newData.Cells[12].Value = tipoEquipVal.Text;
+            newData.Cells[13].Value = dataAtribExpVal.Text; 
+            newData.Cells[14].Value = vesselVal.Text;
+            newData.Cells[15].Value = voyageVal.Text;
+            newData.Cells[16].Value = polVal.Text;
+
             MessageBox.Show("Updated Value");
         }
 
@@ -139,7 +159,7 @@ namespace DesafioMaeil
             $" | tipoCarga: {delRow.TipoCarga} | prioridade: {delRow.Prioridade} | dataRegisto: {delRow.DataRegisto} | blockedTime: {delRow.BlockedTime} " +
             $"| pod: {delRow.Pod} | parque: {delRow.Parque} | tipoEquipamento: {delRow.TipoEquipamento} | DepotIdBlocking: {delRow.DepotIdBlocking} | " +
             $" dataAtribExp: {delRow.DataAtribExp} | vessel: {delRow.Vessel} | voyage: {delRow.Voyage} | pol: {delRow.Pol}");
-            //dataGridView.DataSource = listaClass.listaRow;
+            dt.Rows.RemoveAt(index);
             MessageBox.Show("Deleted Value");
 
         }
@@ -147,7 +167,7 @@ namespace DesafioMaeil
         private void ResetBtn_Click(object sender, EventArgs e)
         {
             ClearTextBox();
-            dataGridView.DataSource = listaClass.listaRow;
+            dataGridView.DataSource = dt.DefaultView;
         }
 
         private void ClearTextBox()
@@ -215,7 +235,7 @@ namespace DesafioMaeil
         private void DataGridView_CellContentClick(object sender, DataGridViewCellEventArgs e)  //https://www.youtube.com/watch?v=C3E1fsXpGRs
         {
             VerifyNull();
-       
+            index = e.RowIndex;
             referenciaVal.Text = dataGridView.SelectedRows[0].Cells[0].Value.ToString();
             clienteVal.Text = dataGridView.SelectedRows[0].Cells[1].Value.ToString();
             estadoVal.Text = dataGridView.SelectedRows[0].Cells[2].Value.ToString();
