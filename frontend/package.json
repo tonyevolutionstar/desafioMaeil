@@ -3,6 +3,10 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
+    "@ag-grid-community/core": "^30.0.0",
+    "@ag-grid-community/csv-export": "^30.0.0",
+    "@ag-grid-enterprise/excel-export": "^30.0.0",
+    "@ag-grid-enterprise/master-detail": "~30.0.0",
     "@testing-library/jest-dom": "^5.16.5",
     "@testing-library/react": "^13.4.0",
     "@testing-library/user-event": "^13.5.0",
