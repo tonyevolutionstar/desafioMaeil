@@ -1,30 +1,30 @@
 import './App.css';
 import { read, utils }  from 'xlsx'; //https://docs.sheetjs.com/docs/getting-started/installation/nodejs
 import React, { useState } from "react";
-import DataGrid from 'react-data-grid';
-import 'react-data-grid/lib/styles.css';
+import { AgGridReact } from 'ag-grid-react';
+
 
 function App() {
   const [items, setItems] = useState([])
   
   const columns = [ 
-    { key: 'Referencia', name: 'Referencia' },
-    { key: 'Cliente', name: 'Cliente' },
-    { key: 'Estado', name: 'Estado' },
-    { key: 'Tipo', name: 'Tipo' },
-    { key: 'Matricula', name: 'Matricula' },
-    { key: 'TipoCarga', name: 'TipoCarga' },
-    { key: 'Prioridade', name: 'Prioridade' },
-    { key: 'DataRegisto', name: 'DataRegisto' },
-    { key: 'BlockedTime', name: 'BlockedTime' },
-    { key: 'POD', name: 'POD' },
-    { key: 'Parque', name: 'Parque' },
-    { key: 'TipoEquipamento', name: 'TipoEquipamento' },
-    { key: 'DepotIdBlocking', name: 'DepotIdBlocking' },
-    { key: 'DataAtribExp', name: 'DataAtribExp' },
-    { key: 'Vessel', name: 'Vessel' },
-    { key: 'Voyage', name: 'Voyage' },
-    { key: 'POL', name: 'POL' }
+    { field: 'Referencia', width:'120', resizable: true, sortable: true, filter: 'agSetColumnFilter'},
+    { field: 'Cliente', width:'120', resizable: true, sortable: true },
+    { field: 'Estado', width:'90',  resizable: true, sortable: true },
+    { field: 'Tipo', width:'90', resizable: true, sortable: true },
+    { field: 'Matricula', width:'120', resizable: true, sortable: true },
+    { field: 'TipoCarga', width:'120', resizable: true, sortable: true },
+    { field: 'Prioridade', width:'120', resizable: true, sortable: true },
+    { field: 'DataRegisto', width:'120', resizable: true, sortable: true },
+    { field: 'BlockedTime', width:'120', resizable: true, sortable: true },
+    { field: 'POD', width:'90', resizable: true, sortable: true },
+    { field: 'Parque', width:'120', resizable: true, sortable: true },
+    { field: 'TipoEquipamento', width:'120', resizable: true, sortable: true },
+    { field: 'DepotIdBlocking', width:'120', resizable: true, sortable: true },
+    { field: 'DataAtribExp', width:'120', resizable: true, sortable: true },
+    { field: 'Vessel', width:'90', resizable: true, sortable: true },
+    { field: 'Voyage', width:'90', resizable: true, sortable: true },
+    { field: 'POL', width:'90', resizable: true, sortable: true }
   ];
 
   const handleFile = (event) => {
@@ -53,10 +53,9 @@ function App() {
     });
   }
 
-
   return (
     <div className="App">
-         <div class="container my-3">
+      <div class="container my-3">
         <br></br>
         <input 
             type="file"
@@ -70,7 +69,15 @@ function App() {
 
       <br></br>
       <br></br>
-      <DataGrid columns={columns} rows={items} onRowsChange={setItems} />
+      <div className='ag-theme-alpine-dark' style={{height:500, width:2000}}>
+          <AgGridReact 
+            rowData={items}
+            columnDefs={columns}
+          ></AgGridReact>
+      </div>
+   
+    
+
     </div>
   );
 }
