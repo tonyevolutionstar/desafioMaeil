@@ -152,8 +152,6 @@ function App() {
     document.getElementById("polControl").value="";
   };
   
-
-
   return (
     <div className="App">
       <div class="container">
@@ -170,12 +168,12 @@ function App() {
             ></input> 
           </div>
           <div class="col-sm">
-          <button
+          <button  class="btn btn-primary"
               onClick={handleOnExport}
               style={{ marginBottom: '5px', fontWeight: 'bold' }}
-            >
+          >
               Export to Excel
-            </button>
+          </button>
         </div>
         </div>
       </div>  
