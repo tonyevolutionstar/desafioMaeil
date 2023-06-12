@@ -1,11 +1,12 @@
 import './App.css';
 import { read, utils, writeFile }  from 'xlsx'; //https://docs.sheetjs.com/docs/getting-started/installation/nodejs
-import React, { useMemo, useCallback, useState, useEffect } from "react";
+import React, { useMemo, useCallback, useState, useRef } from "react";
 import { AgGridReact } from 'ag-grid-react';
 
 function App() {
   const [items, setItems] = useState([{editable: true}])
-  
+  var ws = [];
+
   const columns = [ 
     { field: 'Referencia', width:130, resizable: true, sortable: true, filter: 'agSetColumnFilter'},
     { field: 'Cliente', width:120, resizable: true, sortable: true },
@@ -26,6 +27,8 @@ function App() {
     { field: 'POL', width:90, resizable: true, sortable: true }
   ];
 
+  const gridRef = useRef(); // Optional - for accessing Grid's API
+
   const defaultColDef = useMemo(() => {
     return {
       sortable: true,
@@ -36,9 +39,6 @@ function App() {
     };
   }, []);
 
-  useEffect(() => {
-    setItems(items)
-  })
 
   const handleOnExport = () => {
     var wb = utils.book_new(),
@@ -55,7 +55,7 @@ function App() {
         const bufferArray = e.target.result;
         const wb=read(bufferArray, {type:'array'});
         const wsname=wb.SheetNames[0];
-        const ws=wb.Sheets[wsname];
+        ws=wb.Sheets[wsname];
         const data = utils.sheet_to_json(ws,{
           raw: false 
         });
@@ -89,6 +89,36 @@ function App() {
     console.log('cellEditingStopped');
   }, []);
 
+  function GetValues(){
+    const insertVal = {
+      Referencia: document.getElementById("referenciaControl").value,
+    };
+
+    return insertVal
+  };
+
+  const addInfo = useCallback(() => {
+      const insertVal = GetValues();
+      const transaction = {
+        addIndex:-1,
+        add: [insertVal],
+      };
+      gridRef.current.api.applyTransaction(transaction);
+      items.push(insertVal);
+  }, []);
+
+  const deleteInfo = useCallback(()=> {
+    const selectedRows = gridRef.current.api.getSelectedNodes();
+    //const ind = gridRef.current.api.getRowNode(selectedRows[0].data.Referencia);
+    console.log("data " + selectedRows[0].data.Referencia);
+    const ind = items.findIndex(element => element.Referencia == selectedRows[0].data.Referencia);
+    const transaction = { remove: [selectedRows[0].data]};
+    gridRef.current.api.applyTransaction(transaction);
+
+    items.slice(ind);
+  }, []);
+
+
   return (
     <div className="App">
       <div class="container">
@@ -115,9 +145,99 @@ function App() {
         </div>
       </div>  
       <br></br>
+      <br></br>
+    
+      <form class="form-inline">
+        <div class="form-group mb-4">
+            <label style={{paddingLeft:52, paddingRight:23}}>Referencia</label>
+            <input type="text" class="form-control" id ="referenciaControl"></input>
+        </div>
+        <div class="form-group mx-sm-3 mb-4">
+            <label style={{paddingLeft:80, paddingRight:53}}>Cliente</label>
+            <input type="text" class="form-control" id ="clienteControl"></input>
+        </div>
+        <div class="form-group mx-sm-3 mb-4">
+            <label style={{paddingLeft:80, paddingRight:25}}>Estado</label>
+            <input type="text" class="form-control" id ="estadoControl"></input>
+        </div>
+        <div class="form-group mx-sm-3 mb-4">
+            <label style={{paddingLeft:60, paddingRight:50}}>Tipo</label>
+            <input type="text" class="form-control" id ="tipoControl"></input>
+        </div>
+        <div class="form-group mx-sm-3 mb-4">
+            <label style={{paddingLeft:45, paddingRight:20}}>Matricula</label>
+            <input type="text" class="form-control" id ="matriculaControl"></input>
+        </div>
+        <div class="form-group mx-sm-3 mb-4">
+            <label style={{paddingLeft:55, paddingRight:40}}>TipoCarga</label>
+            <input type="text" class="form-control" id ="tipoCargaControl"></input>
+        </div>
+        <div class="form-group mx-sm-3 mb-4">
+            <label style={{paddingLeft:50, paddingRight:30}}>Prioridade</label>
+            <input type="text" class="form-control" id ="prioridadeControl"></input>
+        </div>
+        <div class="form-group mx-sm-3 mb-4">
+            <label style={{paddingLeft:30, paddingRight:25}}>DataRegisto</label>
+            <input type="text" class="form-control" id ="dataRegistoControl"></input>
+        </div>
+        <div class="form-group mx-sm-3 mb-4">
+            <label style={{paddingLeft:20, paddingRight:22}}>BlockedTime</label>
+            <input type="text" class="form-control" id ="blockedTimeControl"></input>
+        </div>
+        <div class="form-group mx-sm-3 mb-4">
+            <label style={{paddingLeft:90, paddingRight:45}}>POD</label>
+            <input type="text" class="form-control" id ="podControl"></input>
+        </div>
+        <div class="form-group mx-sm-3 mb-4">
+            <label style={{paddingLeft:70, paddingRight:35}}>Parque</label>
+            <input type="text" class="form-control" id ="parqueControl"></input>
+        </div>
+        <div class="form-group mx-sm-3 mb-4">
+            <label style={{paddingRight:15}}>TipoEquipamento</label>
+            <input type="text" class="form-control" id ="tipoEquipamentoControl"></input>
+        </div>
+        <div class="form-group mx-sm-3 mb-4">
+            <label style={{paddingRight:15}}>DepotIdBlocking</label>
+            <input type="text" class="form-control" id ="depotIdBlockingControl"></input>
+        </div>
+        <div class="form-group mx-sm-3 mb-4">
+            <label style={{paddingLeft:50, paddingRight:25}}>DataAtribExp</label>
+            <input type="text" class="form-control" id ="dataAtribExpControl"></input>
+        </div>
+        <div class="form-group mx-sm-3 mb-4">
+            <label style={{paddingLeft:80, paddingRight:30}}>Vessel</label>
+            <input type="text" class="form-control" id ="vesselControl"></input>
+        </div>
+        <div class="form-group mx-sm-3 mb-4">
+            <label style={{paddingLeft:70, paddingRight:20}}>Voyage</label>
+            <input type="text" class="form-control" id ="voyageControl"></input>
+        </div>
+        <div class="form-group mx-sm-3 mb-2">
+            <label style={{paddingLeft:85, paddingRight:20}}>POL</label>
+            <input type="text" class="form-control" id ="polControl"></input>
+        </div>
+      </form>
+      
+      <div class="container">
+        <br></br>
+        <div class="row">
+          <div class="col-6">
+            <button type="button" class="btn btn-success" onClick={addInfo}>Add</button>
+          </div>
+          <div class="col-1">
+            <button type="button" class="btn btn-danger" onClick={deleteInfo}>Remove</button>
+          </div>
+        </div>
+      </div>
+
+      <br></br>
+
       <div className='ag-theme-alpine' style={{height:800, width:2000}}>
           <AgGridReact 
+            ref={gridRef}
             rowData={items}
+            rowSelection='single'
+            animateRows='true'
             columnDefs={columns}
             defaultColDef={defaultColDef}
             onRowEditingStarted={onRowEditingStarted}
