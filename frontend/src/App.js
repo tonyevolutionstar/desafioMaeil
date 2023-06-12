@@ -92,12 +92,28 @@ function App() {
   function GetValues(){
     const insertVal = {
       Referencia: document.getElementById("referenciaControl").value,
+      Cliente: document.getElementById("clienteControl").value,
+      Estado: document.getElementById("estadoControl").value,
+      Tipo: document.getElementById("tipoControl").value,
+      Matricula: document.getElementById("matriculaControl").value,
+      TipoCarga: document.getElementById("tipoCargaControl").value,
+      Prioridade: document.getElementById("prioridadeControl").value,
+      DataRegisto: document.getElementById("dataRegistoControl").value,
+      BlockedTime: document.getElementById("referblockedTimeControlenciaControl").value,
+      POD: document.getElementById("podControl").value,
+      Parque: document.getElementById("parqueControl").value,
+      TipoEquipamento: document.getElementById("tipoEquipamentoControl").value,
+      DepotIdBlocking: document.getElementById("depotIdBlockingControl").value,
+      DataAtribExp: document.getElementById("dataAtribExpControl").value,
+      Vessel: document.getElementById("vesselControl").value,
+      Voyage: document.getElementById("voyageControl").value,
+      POL: document.getElementById("polControl").value,
     };
 
     return insertVal
   };
 
-  const addInfo = useCallback(() => {
+  const addInfo = useCallback(() => { //https://www.ag-grid.com/react-data-grid/server-side-model-updating-transactions/
       const insertVal = GetValues();
       const transaction = {
         addIndex:-1,
@@ -107,16 +123,35 @@ function App() {
       items.push(insertVal);
   }, []);
 
-  const deleteInfo = useCallback(()=> {
+  const deleteInfo = useCallback(()=> { //https://www.ag-grid.com/react-data-grid/server-side-model-updating-transactions/
     const selectedRows = gridRef.current.api.getSelectedNodes();
-    //const ind = gridRef.current.api.getRowNode(selectedRows[0].data.Referencia);
     console.log("data " + selectedRows[0].data.Referencia);
-    const ind = items.findIndex(element => element.Referencia == selectedRows[0].data.Referencia);
+    const ind = items.findIndex(element => element.Referencia === selectedRows[0].data.Referencia);
     const transaction = { remove: [selectedRows[0].data]};
     gridRef.current.api.applyTransaction(transaction);
-
     items.slice(ind);
   }, []);
+
+  function resetInfo () { //https://linuxhint.com/clear-input-fields-javascript/
+    document.getElementById("referenciaControl").value="";
+    document.getElementById("clienteControl").value="";
+    document.getElementById("estadoControl").value="";
+    document.getElementById("tipoControl").value=""; 
+    document.getElementById("matriculaControl").value=""; 
+    document.getElementById("tipoCargaControl").value=""; 
+    document.getElementById("prioridadeControl").value=""; 
+    document.getElementById("dataRegistoControl").value=""; 
+    document.getElementById("blockedTimeControl").value=""; 
+    document.getElementById("podControl").value=""; 
+    document.getElementById("parqueControl").value=""; 
+    document.getElementById("tipoEquipamentoControl").value=""; 
+    document.getElementById("depotIdBlockingControl").value="";
+    document.getElementById("dataAtribExpControl").value="";
+    document.getElementById("vesselControl").value="";
+    document.getElementById("voyageControl").value="";
+    document.getElementById("polControl").value="";
+  };
+  
 
 
   return (
@@ -147,7 +182,7 @@ function App() {
       <br></br>
       <br></br>
     
-      <form class="form-inline">
+      <form class="form-inline" id ="myform">
         <div class="form-group mb-4">
             <label style={{paddingLeft:52, paddingRight:23}}>Referencia</label>
             <input type="text" class="form-control" id ="referenciaControl"></input>
@@ -212,7 +247,7 @@ function App() {
             <label style={{paddingLeft:70, paddingRight:20}}>Voyage</label>
             <input type="text" class="form-control" id ="voyageControl"></input>
         </div>
-        <div class="form-group mx-sm-3 mb-2">
+        <div class="form-group mx-sm-3 mb-4">
             <label style={{paddingLeft:85, paddingRight:20}}>POL</label>
             <input type="text" class="form-control" id ="polControl"></input>
         </div>
@@ -221,10 +256,13 @@ function App() {
       <div class="container">
         <br></br>
         <div class="row">
-          <div class="col-6">
+          <div class="col-3">
             <button type="button" class="btn btn-success" onClick={addInfo}>Add</button>
           </div>
-          <div class="col-1">
+          <div class="col-3">
+            <button type="button" class="btn btn-info" onClick={resetInfo}>Reset</button>
+          </div>
+          <div class="col-3">
             <button type="button" class="btn btn-danger" onClick={deleteInfo}>Remove</button>
           </div>
         </div>
@@ -232,7 +270,7 @@ function App() {
 
       <br></br>
 
-      <div className='ag-theme-alpine' style={{height:800, width:2000}}>
+      <div className='ag-theme-alpine-dark' style={{height:800, width:2000}}>
           <AgGridReact 
             ref={gridRef}
             rowData={items}
