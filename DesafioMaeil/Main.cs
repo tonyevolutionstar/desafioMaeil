@@ -14,7 +14,6 @@ namespace DesafioMaeil
         private Lista listaClass;
         int index; //cell index
         DataTable dt;
-        bool search = false;
 
         private readonly string errorFileSelect = "Error, no selected file";
 

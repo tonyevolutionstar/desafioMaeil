@@ -134,8 +134,6 @@ namespace DesafioMaeil
                     $"| pod: {listaRow.Pod} | parque: {listaRow.Parque} | tipoEquipamento: {listaRow.TipoEquipamento} | DepotIdBlocking: {listaRow.DepotIdBlocking} | " +
                     $" dataAtribExp: {listaRow.DataAtribExp} | vessel: {listaRow.Vessel} | voyage: {listaRow.Voyage} | pol: {listaRow.Pol}");
         }
-
-     
     }
 
     public static class LinqUpdates
@@ -146,6 +144,5 @@ namespace DesafioMaeil
             foreach (var item in source)
                 action(item);
         }
-
     }
 }
